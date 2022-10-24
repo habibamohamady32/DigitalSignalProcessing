@@ -20,7 +20,7 @@ namespace DSPAlgorithms.Algorithms
             float output;
             for (int i = 0; i < InputSignal.Samples.Count; i++)
             {
-                //x normalized = (a-b)*(x – x minimum) / (x maximum – x minimum)+a
+                //x normalized = (b-a)*(x – x minimum) / (x maximum – x minimum)+a
                 output = (InputMaxRange - InputMinRange)
                     * ((InputSignal.Samples[i] - InputSignal.Samples.Min()) / (InputSignal.Samples.Max() - InputSignal.Samples.Min()))
                     + InputMinRange;
