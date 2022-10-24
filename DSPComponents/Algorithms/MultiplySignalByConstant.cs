@@ -15,7 +15,16 @@ namespace DSPAlgorithms.Algorithms
 
         public override void Run()
         {
-            throw new NotImplementedException();
+            List<float> multip = new List<float>();
+            float mul = 0;
+            for (int i = 0; i < InputSignal.Samples.Count; i++)
+            {
+                mul = InputConstant * InputSignal.Samples[i];
+                multip.Add(mul);
+
+
+            }
+            OutputMultipliedSignal = new Signal(multip, false);
         }
     }
 }
