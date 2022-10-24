@@ -19,7 +19,23 @@ namespace DSPAlgorithms.Algorithms
         /// </summary>
         public override void Run()
         {
-            throw new NotImplementedException();
+
+            List<float> result = new List<float>();
+            float output, maximum_signal;
+            if (InputSignal1.Samples.Count > InputSignal2.Samples.Count)
+            {
+                maximum_signal = InputSignal1.Samples.Count;
+            }
+            else
+            {
+                maximum_signal = InputSignal2.Samples.Count;
+            }
+            for (int i = 0; i < maximum_signal; i++)
+            {
+                output = InputSignal1.Samples[i] - InputSignal2.Samples[i];
+                result.Add(output);
+            }
+            OutputSignal = new Signal(result, false);
         }
     }
 }
