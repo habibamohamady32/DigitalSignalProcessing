@@ -24,7 +24,6 @@ namespace DSPAlgorithms.Algorithms
                 output = (InputMaxRange - InputMinRange)
                     * ((InputSignal.Samples[i] - InputSignal.Samples.Min()) / (InputSignal.Samples.Max() - InputSignal.Samples.Min()))
                     + InputMinRange;
-
                 result.Add(output);
             }
             OutputNormalizedSignal = new Signal(result, false);
