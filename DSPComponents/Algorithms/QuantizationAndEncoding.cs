@@ -21,7 +21,7 @@ namespace DSPAlgorithms.Algorithms
 
         public override void Run()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
