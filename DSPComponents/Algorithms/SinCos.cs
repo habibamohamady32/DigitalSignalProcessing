@@ -17,9 +17,29 @@ namespace DSPAlgorithms.Algorithms
         public float SamplingFrequency { get; set; }
         public List<float> samples { get; set; }
         public override void Run()
-        {
+        {   
+
+            float sincos ;
+            List<float> Sampels = new List<float>();
             
-            throw new NotImplementedException();
+            if (type =="sin")
+            {
+                for (int i = 0; i < SamplingFrequency; i++) {
+                    sincos = (float)(A * (Math.Sin(2 * Math.PI * (AnalogFrequency / SamplingFrequency)*i+ PhaseShift)));
+                    Sampels.Add(sincos);    
+                }
+                samples = new List<float>(Sampels);
+            }
+            else if (type == "cos")
+            {
+                for (int i = 0; i < SamplingFrequency; i++)
+                {
+                    sincos = (float)(A * (Math.Cos(2 * Math.PI * (AnalogFrequency / SamplingFrequency) * i + PhaseShift)));
+                    Sampels.Add(sincos);
+                }
+                samples = new List<float>(Sampels);
+
+            }
         }
     }
 }
