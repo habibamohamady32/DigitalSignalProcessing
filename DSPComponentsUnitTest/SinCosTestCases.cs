@@ -21,7 +21,7 @@ namespace DSPComponentsUnitTest
 
             obj.Run();
 
-            var expectedOutput = UnitTestUtitlities.LoadSignal("TestingSignals/Sin.ds");
+            var expectedOutput = UnitTestUtitlities.LoadSignal("C:/Users/Habiba Mohamady/Source/Repos/DigitalSignalProcessing/DSPComponentsUnitTest/TestingSignals/Sin.ds");
 
             Assert.IsTrue(UnitTestUtitlities.SignalsSamplesAreEqual(expectedOutput.Samples, obj.samples));
 
@@ -37,7 +37,7 @@ namespace DSPComponentsUnitTest
             obj.PhaseShift = 2.35619449019235f;
 
             obj.Run();
-            var expectedOutput = UnitTestUtitlities.LoadSignal("TestingSignals/Cos.ds");
+            var expectedOutput = UnitTestUtitlities.LoadSignal("C:/Users/Habiba Mohamady/Source/Repos/DigitalSignalProcessing/DSPComponentsUnitTest/TestingSignals/Cos.ds");
             Assert.IsTrue(UnitTestUtitlities.SignalsSamplesAreEqual(expectedOutput.Samples, obj.samples));
 
 
