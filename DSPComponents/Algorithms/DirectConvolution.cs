@@ -18,7 +18,40 @@ namespace DSPAlgorithms.Algorithms
         /// </summary>
         public override void Run()
         {
-            throw new NotImplementedException();
+            List<float> convolvedSamples = new List<float>();
+            List<int> indxs = new List<int>();
+
+            int startIndx = InputSignal1.SamplesIndices[0] + InputSignal2.SamplesIndices[0];
+            int endIndx = InputSignal1.SamplesIndices[InputSignal1.SamplesIndices.Count - 1] + InputSignal2.SamplesIndices[InputSignal2.SamplesIndices.Count - 1];
+
+            for (int i = startIndx; i <= endIndx; i++)
+                indxs.Add(i);
+
+            for (int i = 0; i < indxs.Count; i++)
+            {
+                float sum = 0;
+                int n = indxs[i];
+
+                for (int k = InputSignal1.SamplesIndices[0]; !(n - k < InputSignal2.SamplesIndices[0] || k > InputSignal1.SamplesIndices[InputSignal1.SamplesIndices.Count - 1]); k++)
+                {
+                    int k_indx = InputSignal1.SamplesIndices.IndexOf(k);
+                    int n_k = InputSignal2.SamplesIndices.IndexOf(n - k);
+
+                    if (n - k > InputSignal2.SamplesIndices[InputSignal2.SamplesIndices.Count - 1] || k < InputSignal1.SamplesIndices[0])
+                        continue;
+
+                    sum += InputSignal1.Samples[k_indx] * InputSignal2.Samples[n_k];
+                }
+                convolvedSamples.Add(sum);
+            }
+
+            if (convolvedSamples[convolvedSamples.Count - 1] == 0)
+            {
+                convolvedSamples.RemoveAt(convolvedSamples.Count - 1);
+                indxs.RemoveAt(indxs.Count - 1);
+            }
+            OutputConvolvedSignal = new Signal(convolvedSamples, indxs, false);
+
         }
     }
 }
