@@ -15,25 +15,19 @@ namespace DSPAlgorithms.Algorithms
         Folder folder = new Folder();
         public override void Run()
         {
-            List<int> outsignalIndex = new List<int>();
-            if (folder.OutputFoldedSignal.Periodic == false)
+            OutputShiftedSignal = new Signal(new List<float>(), false);
+            for (int i = 0; i < InputSignal.SamplesIndices.Count; i++)
             {
-                
-                for (int i = 0; i < InputSignal.Samples.Count; i++)
-                {
-                    InputSignal.SamplesIndices[i]-=ShiftingValue ;
-                }
-            }
-            if (folder.OutputFoldedSignal.Periodic == true)
-            {
-
-                for (int i = 0; i < InputSignal.Samples.Count; i++)
+                if (!InputSignal.Periodic)
+                    InputSignal.SamplesIndices[i] -= ShiftingValue;
+                else
                 {
                     InputSignal.SamplesIndices[i] += ShiftingValue;
+                    OutputShiftedSignal.Periodic = true;
                 }
+                OutputShiftedSignal.Samples.Add(InputSignal.Samples[i]);
+                OutputShiftedSignal.SamplesIndices.Add(InputSignal.SamplesIndices[i]);
             }
-            
-            OutputShiftedSignal = new Signal(InputSignal.Samples, outsignalIndex, false);
         }
     }
 }
