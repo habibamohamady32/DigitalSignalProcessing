@@ -16,23 +16,18 @@ namespace DSPAlgorithms.Algorithms
         public override void Run()
         {
             //for smoothing signal
-            OutputAverageSignal = new Signal(new List<float>(), false);
-            int itr = InputSignal.Samples.Count;
-            int sides = (InputWindowSize - 1) / 2;
-            for (int i = 0; i < itr; i++)
+            float sum = 0;
+            List<float> outSignal = new List<float>();
+            for (int i = 0; i < InputSignal.Samples.Count - InputWindowSize + 1; i++)
             {
-                if (i >= sides && i < itr - sides)
+                for (int j = 0; j < InputWindowSize; j++)
                 {
-                    float sum = InputSignal.Samples[i];
-                    for (int j = 1; j <= sides; j++)
-                    {
-                        sum += InputSignal.Samples[i - j];
-                        sum += InputSignal.Samples[i + j];
-                    }
-                    float avg = sum / InputWindowSize;
-                    OutputAverageSignal.Samples.Add(avg);
+                    sum += InputSignal.Samples[i + j];
                 }
+                outSignal.Add(sum / InputWindowSize);
+                sum = 0;
             }
+            OutputAverageSignal = new Signal(outSignal, false);
         }
     }
 }
