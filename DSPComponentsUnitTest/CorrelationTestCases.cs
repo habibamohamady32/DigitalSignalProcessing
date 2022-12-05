@@ -963,7 +963,7 @@ namespace DSPComponentsUnitTest
         }
 
 
-
+        /*
         [TestMethod]
         public void CrossFastNormalizedCorrelationTestMethod2()
         {
@@ -993,10 +993,18 @@ namespace DSPComponentsUnitTest
 
             Assert.IsTrue(UnitTestUtitlities.SignalsSamplesAreEqual(expectedOutput.Samples, fc.OutputNonNormalizedCorrelation));
         }
-
+        */
         #endregion
     }
 }
+
+
+
+
+
+
+
+
 
 
 

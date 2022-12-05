@@ -41,7 +41,7 @@ namespace DSPAlgorithms.Algorithms
                 x += Math.Pow(InputSignal1.Samples[i], 2);
                 y += Math.Pow(InputSignal2.Samples[i], 2);
             }
-            normlize = Math.Sqrt(x * y) /N;
+            normlize = Math.Sqrt(x * y) /N;//((1/N)sum x1(j)^2 * x2(j)^2)
             for (int i = 0; i < InputSignal1.Samples.Count; i++)
             {
                 corr = 0;

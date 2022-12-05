@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using DSPAlgorithms.DataStructures;
+
 
 namespace DSPAlgorithms.Algorithms
 {
@@ -18,39 +20,53 @@ namespace DSPAlgorithms.Algorithms
         /// </summary>
         public override void Run()
         {
-            List<float> convolvedSamples = new List<float>();
-            List<int> indecies = new List<int>();
-
-            int startIndx = InputSignal1.SamplesIndices[0] + InputSignal2.SamplesIndices[0];
-            int endIndx = InputSignal1.SamplesIndices[InputSignal1.SamplesIndices.Count - 1] + InputSignal2.SamplesIndices[InputSignal2.SamplesIndices.Count - 1];
-
-            for (int n = startIndx; n <= endIndx; n++)
-                indecies.Add(n);
-
-            for (int i = 0; i < indecies.Count; i++)
+            List<Complex> harmonic1;
+            List<Complex> harmonic2;
+            List<Complex> final_harmonic = new List<Complex>();
+            int lenght = InputSignal1.Samples.Count() + InputSignal2.Samples.Count() - 1;
+            for (int i = 0; i < lenght; i++)
             {
-                float sum = 0;
-                int n = indecies[i];
-
-                for (int k = InputSignal1.SamplesIndices[0]; !(n - k < InputSignal2.SamplesIndices[0] || k > InputSignal1.SamplesIndices[InputSignal1.SamplesIndices.Count - 1]); k++)
+                if (i >= InputSignal1.Samples.Count())
                 {
-                    int k_indx = InputSignal1.SamplesIndices.IndexOf(k);
-                    int n_k = InputSignal2.SamplesIndices.IndexOf(n - k);
-
-                    if (n - k > InputSignal2.SamplesIndices[InputSignal2.SamplesIndices.Count - 1] || k < InputSignal1.SamplesIndices[0])
-                        continue;
-
-                    sum += InputSignal1.Samples[k_indx] * InputSignal2.Samples[n_k];
+                    InputSignal1.Samples.Add(0);
+                    InputSignal1.SamplesIndices.Add(i);
                 }
-                convolvedSamples.Add(sum);
+                if (i >= InputSignal2.Samples.Count())
+                {
+                    InputSignal2.Samples.Add(0);
+                    InputSignal2.SamplesIndices.Add(i);
+                }
             }
+            DiscreteFourierTransform dft = new DiscreteFourierTransform();
+            dft.InputTimeDomainSignal = InputSignal1;
+            dft.Run();
+            harmonic1 = new List<Complex>(dft.harmonis);
+            dft.harmonis.Clear();
+            dft.InputTimeDomainSignal = InputSignal2;
+            dft.Run();
+            harmonic2 = new List<Complex>(dft.harmonis);
 
-            if (convolvedSamples[convolvedSamples.Count - 1] == 0)
+            for (int x = 0; x < harmonic1.Count; x++)
             {
-                convolvedSamples.RemoveAt(convolvedSamples.Count - 1);
-                indecies.RemoveAt(indecies.Count - 1);
+                Complex temp = harmonic1[x] * harmonic2[x];
+                final_harmonic.Add(temp);
             }
-            OutputConvolvedSignal = new Signal(convolvedSamples, indecies, false);
+            Signal s = new Signal(new List<float>(), false);
+            List<float> mag = new List<float>();
+            List<float> phase_shift = new List<float>();
+            foreach (var g in final_harmonic)
+            {
+                mag.Add((float)g.Magnitude);
+                phase_shift.Add((float)g.Phase);
+
+            }
+            s.FrequenciesAmplitudes = mag;
+            s.FrequenciesPhaseShifts = phase_shift;
+            InverseDiscreteFourierTransform idft = new InverseDiscreteFourierTransform();
+            idft.InputFreqDomainSignal = s;
+            idft.Run();
+            OutputConvolvedSignal = new Signal(new List<float>(), false);
+            OutputConvolvedSignal = idft.OutputTimeDomainSignal;
         }
     }
 }
