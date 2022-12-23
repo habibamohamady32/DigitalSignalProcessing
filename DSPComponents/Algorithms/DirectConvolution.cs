@@ -18,39 +18,37 @@ namespace DSPAlgorithms.Algorithms
         /// </summary>
         public override void Run()
         {
-            List<float> convolvedSamples = new List<float>();
-            List<int> indecies = new List<int>();
-
-            int startIndx = InputSignal1.SamplesIndices[0] + InputSignal2.SamplesIndices[0];
-            int endIndx = InputSignal1.SamplesIndices[InputSignal1.SamplesIndices.Count - 1] + InputSignal2.SamplesIndices[InputSignal2.SamplesIndices.Count - 1];
-
-            for (int n = startIndx; n <= endIndx; n++)
-                indecies.Add(n);
-
-            for (int i = 0; i < indecies.Count; i++)
+            List<float> output = new List<float>();
+            List<int> indcies = new List<int>();
+            for (int i = 0; i < InputSignal1.Samples.Count; i++)
             {
-                float sum = 0;
-                int n = indecies[i];
-
-                for (int k = InputSignal1.SamplesIndices[0]; !(n - k < InputSignal2.SamplesIndices[0] || k > InputSignal1.SamplesIndices[InputSignal1.SamplesIndices.Count - 1]); k++)
+                for (int j = 0; j < InputSignal2.Samples.Count; j++)
                 {
-                    int k_indx = InputSignal1.SamplesIndices.IndexOf(k);
-                    int n_k = InputSignal2.SamplesIndices.IndexOf(n - k);
+                    if (i + j < output.Count)
+                    {
+                        output[i + j] = output[i + j] + (InputSignal2.Samples[j] * InputSignal1.Samples[i]);
 
-                    if (n - k > InputSignal2.SamplesIndices[InputSignal2.SamplesIndices.Count - 1] || k < InputSignal1.SamplesIndices[0])
-                        continue;
+                    }
 
-                    sum += InputSignal1.Samples[k_indx] * InputSignal2.Samples[n_k];
+                    else
+                    {
+                        output.Add(InputSignal2.Samples[j] * InputSignal1.Samples[i]);
+
+                    }
                 }
-                convolvedSamples.Add(sum);
             }
-
-            if (convolvedSamples[convolvedSamples.Count - 1] == 0)
+            if (output[output.Count - 1] == 0f)
             {
-                convolvedSamples.RemoveAt(convolvedSamples.Count - 1);
-                indecies.RemoveAt(indecies.Count - 1);
+                output.RemoveAt(output.Count - 1);
             }
-            OutputConvolvedSignal = new Signal(convolvedSamples, indecies, false);
+            OutputConvolvedSignal = new Signal(output, false);
+            int min = InputSignal1.SamplesIndices.Min() + InputSignal2.SamplesIndices.Min();
+            for (int i = 0; i < output.Count; i++)
+            {
+                indcies.Add(min);
+                min++;
+            }
+            OutputConvolvedSignal.SamplesIndices = indcies;
         }
     }
 }
